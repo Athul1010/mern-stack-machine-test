@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../Styles/Register.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 
 const Register = () => {
@@ -14,6 +14,9 @@ const Register = () => {
   const [gender, setGender] = useState('');
   const [course, setCourse] = useState('');
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
+
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -39,6 +42,7 @@ const Register = () => {
       });
       console.log(response.data);
       alert('Registration successful');
+      navigate('/');
     } catch (error) {
       console.error('Registration error:', error);
       alert('Registration failed');
@@ -46,19 +50,22 @@ const Register = () => {
   };
 
   const handleCourseChange = (e) => {
-    const selectedCourse = e.target.value;
-    setCourse(selectedCourse);
+    setCourse(e.target.value);
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    setImage(file);
+    if (file) {
+      setImageUrl(URL.createObjectURL(file)); // Temporary URL for preview
+    }
   };
 
   return (
     <div>
       <Navbar />
       <div className='container'>
-        <Link to={'/'}>home</Link>
+        <Link to={'/'}>Home</Link>
         <h1 className='mt-4'>Register</h1>
         <form className='mt-4' onSubmit={handleRegister}>
           <div className='row'>
@@ -73,7 +80,6 @@ const Register = () => {
                 id="name"
               />
             </div>
-
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="email" className="form-label">Email</label>
               <input
@@ -86,7 +92,6 @@ const Register = () => {
                 required
               />
             </div>
-
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="mobile" className="form-label">Mobile</label>
               <input
@@ -98,7 +103,6 @@ const Register = () => {
                 id="mobile"
               />
             </div>
-
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="work" className="form-label">Work</label>
               <input
@@ -110,7 +114,6 @@ const Register = () => {
                 id="work"
               />
             </div>
-
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label className="form-label">Gender</label>
               <div>
@@ -134,7 +137,6 @@ const Register = () => {
                 <label htmlFor="female" className="form-label">Female</label>
               </div>
             </div>
-
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label className="form-label">Course</label>
               <div>
@@ -171,7 +173,6 @@ const Register = () => {
                 <label htmlFor="bsc" className="form-label">BSC</label>
               </div>
             </div>
-
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="add" className="form-label">Address</label>
               <input
@@ -183,7 +184,6 @@ const Register = () => {
                 id="add"
               />
             </div>
-
             <div className="mb-3 col-lg-12 col-md-12 col-12">
               <label htmlFor="desc" className="form-label">Description</label>
               <textarea
@@ -196,19 +196,19 @@ const Register = () => {
                 rows="5"
               ></textarea>
             </div>
-
             <div className="mb-3 col-lg-12 col-md-12 col-12">
-              <label htmlFor="image" className="form-label">Upload Image</label>
+              <label htmlFor="image" className="form-label">Image</label>
               <input
                 type="file"
-                accept=".jpg, .png"
                 onChange={handleImageChange}
                 name='image'
                 className="form-control"
                 id="image"
               />
+              {imageUrl && (
+                <img src={imageUrl} alt="Uploaded" className="img-thumbnail mt-3" style={{ maxWidth: '200px' }} />
+              )}
             </div>
-
             <button type="submit" className="btn btn-primary">Submit</button>
           </div>
         </form>

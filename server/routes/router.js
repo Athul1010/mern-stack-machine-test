@@ -91,4 +91,20 @@ router.delete("/deleteuser/:id", async (req, res) => {
   }
 });
 
+// get individual user
+
+router.get("/getuser/:id", async (req, res) => { //api defining
+  try {
+      console.log(req.params);
+      const { id } = req.params;
+
+      const userindividual = await users.findById({ _id: id }); // valid "id" aanenkil ith work aakm
+      console.log(userindividual);
+      res.status(201).json(userindividual) // ith success aayal "details.jsx" il pokm
+
+  } catch (error) {
+      res.status(422).json(error)
+  }
+})
+
 module.exports = router;

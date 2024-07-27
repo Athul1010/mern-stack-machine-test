@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from './Navbar'
+import React, { useEffect, useState } from 'react';
+import Navbar from './Navbar';
 import axios from 'axios';
-import '../Styles/Table.css'
+import '../Styles/Table.css';
 import { CiRead } from "react-icons/ci";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { Link } from 'react-router-dom';
 
 const Table = () => {
-
     const [getuserdata, setUserdata] = useState([]);
-    console.log(getuserdata);
+    const [searchTerm, setSearchTerm] = useState('');
 
+    // Fetch user data
     const getdata = async () => {
         try {
             const result = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/getdata`);
@@ -26,14 +26,12 @@ const Table = () => {
         getdata();
     }, []); // Empty dependency array to run once when the component mounts
 
-
-    // ..........................delete functionality...........................
-
-    const deleteuser = async (id) =>{
-        const res2 = await fetch(`http://localhost:8003/deleteuser/${id}`,{
-            method:"DELETE",
+    // Delete user
+    const deleteuser = async (id) => {
+        const res2 = await fetch(`http://localhost:8003/deleteuser/${id}`, {
+            method: "DELETE",
             headers: {
-                "content-Type": "application/json"
+                "Content-Type": "application/json"
             }
         });
 
@@ -42,14 +40,21 @@ const Table = () => {
 
         if (res2.status === 422 || !deletedata) {
             console.log(deletedata);
-        }else{
+        } else {
             console.log("user deleted");
-            getdata(); // delete aayi kazhinjal veedum "getdata();" ne call cheyym
+            getdata(); // Refresh data after deletion
         }
     }
 
-    // ..........................delete functionality...........................
+    // Handle search input change
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value.toLowerCase());
+    };
 
+    // Filter users based on search term
+    const filteredData = getuserdata.filter(user => 
+        user.name.toLowerCase().includes(searchTerm)
+    );
 
     return (
         <div>
@@ -58,11 +63,21 @@ const Table = () => {
                 <div className="container">
                     <div className="add_btn mt-2 mb-2">
                         <Link to='/register' className='btn btn-primary'>Add data</Link>
+                        <div>
+                            <label htmlFor="search">Search</label>
+                            <input
+                                type="text"
+                                id="search"
+                                placeholder='Enter search keyword'
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                            />
+                        </div>
                     </div>
 
-                    <table class="table">
+                    <table className="table">
                         <thead>
-                            <tr class="table-dark">
+                            <tr className="table-dark">
                                 <th scope="col">ID</th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Username</th>
@@ -75,39 +90,41 @@ const Table = () => {
                             </tr>
                         </thead>
                         <tbody>
-
-                            {
-                                getuserdata.map((element, id) => {
-                                    return (
-                                        <>
-                                            <tr>
-                                                {/* "id+1" koduthath oronn details varumbozum 1,2,3,4,....angane pokan */}
-                                                <th scope="row">{id + 1}</th>
-                                                <td>{element?.image}</td>
-                                                <td>{element?.name}</td>
-                                                <td>{element?.email}</td>
-                                                <td>{element?.work}</td>
-                                                <td>{element?.mobile}</td>
-                                                <td>{element?.gender}</td>
-                                                <td>{element?.course}</td>
-                                                <td className='d-flex justify-content-between'>
-
-                                                    {/* App.js il ulla path aan ith */}
-
-                                                    <Link to={`edit/${element._id}`}><button className='btn btn-primary'><MdEdit /></button></Link>
-                                                    <button className='btn btn-danger' onClick={()=>deleteuser(element._id)}><MdDelete /></button>
-                                                </td>
-                                            </tr>
-                                        </>
-                                    )
-                                })
-                            }
+                            {filteredData.length > 0 ? (
+                                filteredData.map((element, id) => (
+                                    <tr key={element._id}>
+                                        {/* "id+1" koduthath oronn details varumbozum 1,2,3,4,....angane pokan */}
+                                        <th scope="row">{id + 1}</th>
+                                        <td>{element?.image}</td>
+                                        <td>{element?.name}</td>
+                                        <td>{element?.email}</td>
+                                        <td>{element?.work}</td>
+                                        <td>{element?.mobile}</td>
+                                        <td>{element?.gender}</td>
+                                        <td>{element?.course}</td>
+                                        <td className='d-flex justify-content-between'>
+                                            <Link to={`edit/${element._id}`}>
+                                                <button className='btn btn-primary'>
+                                                    <MdEdit />
+                                                </button>
+                                            </Link>
+                                            <button className='btn btn-danger' onClick={() => deleteuser(element._id)}>
+                                                <MdDelete />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="9">No users found</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default Table
+export default Table;
