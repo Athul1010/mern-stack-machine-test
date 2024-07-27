@@ -1,0 +1,191 @@
+/* Navbar.css */
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgb(34,139,34);
+    color: #fff;
+  }
+  
+  .navbar-logo img {
+    height: 40px;
+    /* Adjust the height as needed */
+  }
+  
+  .navbar-options {
+    list-style: none;
+    display: flex;
+    gap: 5rem;
+    margin-bottom: 0; 
+      /* margin bottom : 0; kodukkanam from inspect - navbar content center il akkan */
+  }
+  
+  .navbar-options li {
+    cursor: pointer;
+  }
+  
+  .navbar-options a{
+    text-decoration: none;
+    color: white;
+  }
+  
+  .dropdown {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    list-style: none;
+    padding: 1rem;
+    min-width: 300px;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown-content li {
+    padding: 15px;
+    color: black;
+  }
+  
+  .dropdown-content li:nth-child(2){
+    border-top: 1px solid rgb(198, 198, 198);
+    border-bottom: 1px solid rgb(198, 198, 198);
+  }
+  
+  .menu-icon {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  
+  .bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 2px 0;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: -300px; 
+    width: 300px;
+    height: 100%;
+    background-color: #fff;
+    transition: right 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    opacity: 1;
+    overflow-y: scroll;
+  }
+  
+  .sidebar.active {
+    right: 0;
+  }
+  
+  .sidebar.inactive {
+    /* Hide the sidebar by moving it out of the screen and fading out */
+    right: -300px;
+    opacity: 0;
+  }
+  
+  .close-section{
+    display: flex;
+    justify-content: center;
+    height: 5rem;
+  }
+  
+  .close-btn{
+    display: flex;
+    justify-content: flex-start;
+    width: 89%;
+  }
+  
+  .close-btn button{
+    border: none;
+    font-size: 30px;
+    background: none;
+  }
+  
+  .options-section {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem; 
+    padding: 20px;
+    color: black;
+  }
+  
+  .options-section a{
+    text-decoration: none;
+    color: black;
+  }
+  
+  .works-accordion {
+    cursor: pointer;
+  }
+  
+  .works-accordion.active .sub-options {
+    max-height: 500px; 
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+  }
+  
+  .sub-options {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+  }
+  
+  .sub-options a {
+    display: block;
+    padding: 15px 0;
+    color: black;
+    text-decoration: none;
+    margin-top: 1rem;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .navbar-options {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      width: 100%;
+      background-color: #333;
+      text-align: center;
+      z-index: 1;
+    }
+  
+    .navbar-options.active {
+      display: flex;
+    }
+  
+    .menu-icon {
+      display: flex;
+    }
+  }
+  
+  @media screen and (min-width: 769px) {
+    .menu-icon {
+      display: none;
+    }
+  
+    .navbar-options {
+      display: flex;
+    }
+  
+    .sidebar {
+      display: none; 
+    }
+  }
+  
+  
