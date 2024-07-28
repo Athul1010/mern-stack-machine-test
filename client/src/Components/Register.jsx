@@ -9,8 +9,6 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
   const [work, setWork] = useState('');
-  // const [add, setAdd] = useState('');
-  // const [desc, setDesc] = useState('');
   const [gender, setGender] = useState('');
   const [course, setCourse] = useState([]);
   const [image, setImage] = useState(null);
@@ -84,7 +82,7 @@ const Register = () => {
       });
       console.log(response.data);
       alert('Registration successful');
-      navigate('/');
+      navigate('/table');
     } catch (error) {
       console.error('Registration error:', error);
       alert('Registration failed');
@@ -119,7 +117,7 @@ const Register = () => {
     <div>
       <Navbar />
       <div className='container'>
-        <Link to={'/table'}>Home</Link>
+        
         <h1 className='mt-4'>Create Employee</h1>
         <form className='mt-4' onSubmit={handleRegister}>
           <div className='row'>
@@ -233,35 +231,11 @@ const Register = () => {
               {errors.course && <p className="text-danger">{errors.course}</p>}
             </div>
 
-            {/* <div className="mb-3 col-lg-6 col-md-6 col-12">
-              <label htmlFor="add" className="form-label">Address</label>
-              <input
-                type="text"
-                value={add}
-                onChange={(e) => setAdd(e.target.value)}
-                name='add'
-                className="form-control"
-                id="add"
-              />
-            </div>
-            <div className="mb-3 col-lg-12 col-md-12 col-12">
-              <label htmlFor="desc" className="form-label">Description</label>
-              <textarea
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
-                name="desc"
-                className='form-control'
-                id="desc"
-                cols="30"
-                rows="5"
-              ></textarea>
-            </div> */}
-            
             <div className="mb-3 col-lg-12 col-md-12 col-12">
               <label htmlFor="image" className="form-label">Image</label>
               <input
                 type="file"
-                accept=".jpg,.jpeg,.png"
+                accept=".jpg,.png"
                 onChange={handleImageChange}
                 name='image'
                 className="form-control"
@@ -273,7 +247,7 @@ const Register = () => {
                 <img src={imageUrl} alt="Uploaded" className="img-thumbnail mt-3" style={{ maxWidth: '200px' }} />
               )}
             </div>
-            <button type="submit" className="btn btn-primary">Submit</button>
+            <button type="submit" className="btn btn-primary mb-5">Submit</button>
           </div>
         </form>
       </div>

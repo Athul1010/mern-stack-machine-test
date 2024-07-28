@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../Styles/Edit.css';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 
 const Edit = () => {
@@ -13,6 +13,10 @@ const Edit = () => {
   const [work, setWork] = useState('');
   const [gender, setGender] = useState('');
   const [course, setCourse] = useState('');
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
+
+  let navigate = useNavigate();
 
   const getData = async () => {
     try {
@@ -24,11 +28,15 @@ const Edit = () => {
       setMobile(data.mobile);
       setWork(data.work);
       setGender(data.gender);
-      setCourse(data.course); // Assuming course data is also fetched
+      setCourse(data.course);
+      setImageUrl(data.image); // Ensure this is correctly retrieved from the backend
+
+      console.log("Fetched user data:", data); // Log the data to inspect the image URL/path
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
 
   useEffect(() => {
     getData();
@@ -42,13 +50,15 @@ const Edit = () => {
       mobile,
       work,
       gender,
-      course
+      course,
+      imageUrl, // Add this if you're sending the image URL/path as part of the update
     };
 
     try {
       const response = await axios.patch(`http://localhost:8003/updateuser/${id}`, updatedData);
       console.log("User updated:", response.data);
       alert("Data updated successfully");
+      navigate('/table')
     } catch (error) {
       console.error("Error updating data:", error);
       alert("Update failed");
@@ -60,12 +70,26 @@ const Edit = () => {
     setCourse(selectedCourse);
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const validExtensions = ['jpg', 'png'];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (validExtensions.includes(fileExtension)) {
+      setImage(file);
+      setImageUrl(URL.createObjectURL(file));
+    } else {
+      setImage(null);
+      setImageUrl('');
+      alert('Only JPG, PNG images are supported.');
+    }
+  };
+
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <div className='container'>
-        
-        <Link to={'/table'}>Home</Link>
+
         <form className='mt-4'>
           <div className='row'>
             <div className="mb-3 col-lg-6 col-md-6 col-12">
@@ -79,7 +103,7 @@ const Edit = () => {
                 id="name"
               />
             </div>
-  
+
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="email" className="form-label">Email</label>
               <input
@@ -91,7 +115,7 @@ const Edit = () => {
                 id="email"
               />
             </div>
-  
+
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="mobile" className="form-label">Mobile</label>
               <input
@@ -103,7 +127,7 @@ const Edit = () => {
                 id="mobile"
               />
             </div>
-  
+
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="work" className="form-label">Designation</label>
               <input
@@ -115,7 +139,7 @@ const Edit = () => {
                 id="work"
               />
             </div>
-  
+
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label className="form-label">Gender</label>
               <div>
@@ -141,7 +165,7 @@ const Edit = () => {
                 <label htmlFor="female" className="form-label">Female</label>
               </div>
             </div>
-  
+
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label className="form-label">Course</label>
               <div>
@@ -178,7 +202,23 @@ const Edit = () => {
                 <label htmlFor="bsc" className="form-label">BSC</label>
               </div>
             </div>
-  
+
+            <div className="mb-3 col-lg-12 col-md-12 col-12">
+              <label htmlFor="image" className="form-label">Image</label>
+              <input
+                type="file"
+                accept=".jpg,.png"
+                onChange={handleImageChange}
+                name='image'
+                className="form-control"
+                id="image"
+              />
+              {imageUrl && (
+                <img src={imageUrl} alt="User uploaded" className="img-thumbnail mt-3" style={{ maxWidth: '200px' }} />
+              )}
+            </div>
+
+
             <button type="submit" onClick={updateUser} className="btn btn-primary">Submit</button>
           </div>
         </form>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { BiSearch } from "react-icons/bi";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import cup from '../Assets/trophy.png'
+
 import '../Styles/Navbar.css'
 import { Link } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <div className="navbar-logo">
-                <h1>Logo</h1>
+                <h3>DealsDray</h3>
             </div>
             <div className={`menu-icon ${showSidebar ? 'active' : ''}`} onClick={toggleSidebar}>
                 <div className="bar"></div>
@@ -34,7 +34,7 @@ const Navbar = () => {
                 <div className="bar"></div>
             </div>
             <ul className='navbar-options'>
-                <Link to={'/'}><div>Home</div></Link>
+                <Link to={'/dashboard'}><div>Home</div></Link>
                 {/* <Link to={'/about/'}><div>About Us</div></Link>
                 <li className="dropdown">
                     How it works
@@ -58,7 +58,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="options-section">
-                    <Link to={'/'}><div>Home</div></Link>
+                    <Link to={'/dashboard'}><div>Home</div></Link>
                     <Link to={''}><div>Employee List</div></Link>
                     <Link to={''}><div>Hukum Gupta -</div></Link>
                     <Link to={''}><div>Logout</div></Link>

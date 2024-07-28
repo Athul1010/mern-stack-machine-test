@@ -6,9 +6,6 @@ const DashBoard = () => {
   return (
     <div>
         <Navbar/>
-        <div>
-            <h1>DashBoard</h1>
-        </div>
         <div className='welcome'>
             <h1>Welcome Admin Panel</h1>
         </div>

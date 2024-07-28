@@ -1,13 +1,13 @@
 /* Navbar.css */
 
 .navbar {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: rgb(255,255,0);
-    color: black;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+}
   
   .navbar-logo img {
     height: 40px;
@@ -28,7 +28,7 @@
   
   .navbar-options a{
     text-decoration: none;
-    color: black;
+    color: white;
   }
   
   .dropdown {

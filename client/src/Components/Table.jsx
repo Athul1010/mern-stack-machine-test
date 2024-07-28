@@ -34,7 +34,7 @@ const Table = () => {
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value.toLowerCase());
     };
-    console.log('datasssss',getuserdata);
+    console.log('datas',getuserdata);
 
     const filteredData = getuserdata.filter(user => {
         const userId = user._id ? user._id.toString() : '';
