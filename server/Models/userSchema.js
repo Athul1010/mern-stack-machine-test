@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
     image: {
         type: String, 
         required: true 
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now // Set default to current date and time
     }
     
 });
