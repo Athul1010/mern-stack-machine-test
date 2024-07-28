@@ -13,40 +13,50 @@ const Edit = () => {
   const [work, setWork] = useState('');
   const [gender, setGender] = useState('');
   const [course, setCourse] = useState('');
-
-  const getData = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8003/getuser/${id}`);
-      const data = response.data;
-
-      setName(data.name);
-      setEmail(data.email);
-      setMobile(data.mobile);
-      setWork(data.work);
-      setGender(data.gender);
-      setCourse(data.course); // Assuming course data is also fetched
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/getuser/${id}`);
+        const data = response.data;
+
+        setName(data.name);
+        setEmail(data.email);
+        setMobile(data.mobile);
+        setWork(data.work);
+        setGender(data.gender);
+        setCourse(data.course);
+        setImageUrl(data.image); // Assuming the backend sends the image URL
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
     getData();
-  }, []);
+  }, [id]);
 
   const updateUser = async (e) => {
     e.preventDefault();
-    const updatedData = {
-      name,
-      email,
-      mobile,
-      work,
-      gender,
-      course
-    };
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('mobile', mobile);
+    formData.append('work', work);
+    formData.append('gender', gender);
+    formData.append('course', course);
+    if (image) {
+      formData.append('image', image);
+    }
 
     try {
-      const response = await axios.patch(`http://localhost:8003/updateuser/${id}`, updatedData);
+      const response = await axios.patch(`${process.env.REACT_APP_BACKEND_API_URL}/updateuser/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       console.log("User updated:", response.data);
       alert("Data updated successfully");
     } catch (error) {
@@ -60,13 +70,18 @@ const Edit = () => {
     setCourse(selectedCourse);
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    setImageUrl(URL.createObjectURL(file));
+  };
+
   return (
     <div>
       <Navbar/>
       <div className='container'>
-        
         <Link to={'/table'}>Home</Link>
-        <form className='mt-4'>
+        <form className='mt-4' onSubmit={updateUser}>
           <div className='row'>
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="name" className="form-label">Name</label>
@@ -179,7 +194,21 @@ const Edit = () => {
               </div>
             </div>
   
-            <button type="submit" onClick={updateUser} className="btn btn-primary">Submit</button>
+            <div className="mb-3 col-lg-12 col-md-12 col-12">
+              <label htmlFor="image" className="form-label">Image</label>
+              <input
+                type="file"
+                onChange={handleImageChange}
+                name='image'
+                className="form-control"
+                id="image"
+              />
+              {imageUrl && (
+                <img src={imageUrl} alt="Selected" className="img-thumbnail mt-3" style={{ maxWidth: '200px' }} />
+              )}
+            </div>
+  
+            <button type="submit" className="btn btn-primary">Submit</button>
           </div>
         </form>
       </div>

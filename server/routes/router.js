@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
-    const filetypes = /jpg|png/;
+    const filetypes = /jpg|jpeg|png/;
     const mimetype = filetypes.test(file.mimetype);
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
@@ -31,10 +31,10 @@ const upload = multer({
 
 // Register user with image upload
 router.post("/register", upload.single('image'), async (req, res) => {
-  const { name, email, mobile, work, add, gender, course } = req.body;
+  const { name, email, mobile, work, add, desc, gender, course } = req.body;
   const image = req.file ? req.file.filename : null; // Get the filename of the uploaded image
 
-  if (!name || !email || !mobile || !work || !add || !gender || !course) {
+  if (!name || !email || !mobile || !work || !add || !desc || !gender || !course) {
     return res.status(422).json("Please fill all the data");
   }
 
@@ -44,7 +44,7 @@ router.post("/register", upload.single('image'), async (req, res) => {
       return res.status(422).json("This user is already present");
     } else {
       const adduser = new users({
-        name, email, mobile, work, add, gender, course, image
+        name, email, mobile, work, add, desc, gender, course, image
       });
 
       await adduser.save();
