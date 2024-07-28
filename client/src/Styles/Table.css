@@ -4,3 +4,23 @@
 .container{
     overflow: auto;
 }
+.search-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    width: 50%;
+}
+.setting {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 25px;
+}
+.search-user-container{
+    display: flex;
+    justify-content: right;
+    width: 100%;
+}

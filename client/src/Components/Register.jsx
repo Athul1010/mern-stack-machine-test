@@ -9,27 +9,65 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
   const [work, setWork] = useState('');
-  const [add, setAdd] = useState('');
-  const [desc, setDesc] = useState('');
   const [gender, setGender] = useState('');
-  const [course, setCourse] = useState('');
+  const [course, setCourse] = useState([]);
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
+  const [errors, setErrors] = useState({});
+  const [imageError, setImageError] = useState('');
 
   const navigate = useNavigate();
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim() || !emailPattern.test(email)) {
+      newErrors.email = 'Valid email is required';
+    }
+
+    if (!mobile.trim()) {
+      newErrors.mobile = 'Mobile number is required';
+    } else if (!/^\d+$/.test(mobile)) {
+      newErrors.mobile = 'Mobile number must be digits only';
+    }
+
+    if (!work.trim()) {
+      newErrors.work = 'Work designation is required';
+    }
+
+    if (!gender) {
+      newErrors.gender = 'Gender is required';
+    }
+
+    if (course.length === 0) {
+      newErrors.course = 'At least one course must be selected';
+    }
+
+    if (!image) {
+      newErrors.image = 'Image is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) return;
 
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
     formData.append('mobile', mobile);
     formData.append('work', work);
-    formData.append('add', add);
-    formData.append('desc', desc);
     formData.append('gender', gender);
-    formData.append('course', course);
+    formData.append('course', course.join(','));
     if (image) {
       formData.append('image', image);
     }
@@ -37,8 +75,8 @@ const Register = () => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_API_URL}/register`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       });
       console.log(response.data);
       alert('Registration successful');
@@ -50,14 +88,26 @@ const Register = () => {
   };
 
   const handleCourseChange = (e) => {
-    setCourse(e.target.value);
+    const { value, checked } = e.target;
+    if (checked) {
+      setCourse([...course, value]);
+    } else {
+      setCourse(course.filter((c) => c !== value));
+    }
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setImage(file);
-    if (file) {
-      setImageUrl(URL.createObjectURL(file)); // Temporary URL for preview
+    const validExtensions = ['jpg', 'png'];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (validExtensions.includes(fileExtension)) {
+      setImage(file);
+      setImageError('');
+      setImageUrl(URL.createObjectURL(file));
+    } else {
+      setImageError('Only JPG or PNG images are supported.');
+      setImage(null);
     }
   };
 
@@ -65,8 +115,8 @@ const Register = () => {
     <div>
       <Navbar />
       <div className='container'>
-        <Link to={'/'}>Home</Link>
-        <h1 className='mt-4'>Register</h1>
+        <Link to={'/table'}>Home</Link>
+        <h1 className='mt-4'>Create Employee</h1>
         <form className='mt-4' onSubmit={handleRegister}>
           <div className='row'>
             <div className="mb-3 col-lg-6 col-md-6 col-12">
@@ -79,6 +129,7 @@ const Register = () => {
                 className="form-control"
                 id="name"
               />
+              {errors.name && <p className="text-danger">{errors.name}</p>}
             </div>
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="email" className="form-label">Email</label>
@@ -89,8 +140,8 @@ const Register = () => {
                 name='email'
                 className="form-control"
                 id="email"
-                required
               />
+              {errors.email && <p className="text-danger">{errors.email}</p>}
             </div>
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="mobile" className="form-label">Mobile</label>
@@ -102,9 +153,10 @@ const Register = () => {
                 className="form-control"
                 id="mobile"
               />
+              {errors.mobile && <p className="text-danger">{errors.mobile}</p>}
             </div>
             <div className="mb-3 col-lg-6 col-md-6 col-12">
-              <label htmlFor="work" className="form-label">Work</label>
+              <label htmlFor="work" className="form-label">Designation</label>
               <input
                 type="text"
                 value={work}
@@ -113,6 +165,7 @@ const Register = () => {
                 className="form-control"
                 id="work"
               />
+              {errors.work && <p className="text-danger">{errors.work}</p>}
             </div>
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label className="form-label">Gender</label>
@@ -136,6 +189,7 @@ const Register = () => {
                 />
                 <label htmlFor="female" className="form-label">Female</label>
               </div>
+              {errors.gender && <p className="text-danger">{errors.gender}</p>}
             </div>
             <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label className="form-label">Course</label>
@@ -143,7 +197,7 @@ const Register = () => {
                 <input
                   type="checkbox"
                   value="MCA"
-                  checked={course === "MCA"}
+                  checked={course.includes("MCA")}
                   onChange={handleCourseChange}
                   name='course'
                   id="mca"
@@ -154,7 +208,7 @@ const Register = () => {
                 <input
                   type="checkbox"
                   value="BCA"
-                  checked={course === "BCA"}
+                  checked={course.includes("BCA")}
                   onChange={handleCourseChange}
                   name='course'
                   id="bca"
@@ -165,37 +219,16 @@ const Register = () => {
                 <input
                   type="checkbox"
                   value="BSC"
-                  checked={course === "BSC"}
+                  checked={course.includes("BSC")}
                   onChange={handleCourseChange}
                   name='course'
                   id="bsc"
                 />
                 <label htmlFor="bsc" className="form-label">BSC</label>
               </div>
+              {errors.course && <p className="text-danger">{errors.course}</p>}
             </div>
-            <div className="mb-3 col-lg-6 col-md-6 col-12">
-              <label htmlFor="add" className="form-label">Address</label>
-              <input
-                type="text"
-                value={add}
-                onChange={(e) => setAdd(e.target.value)}
-                name='add'
-                className="form-control"
-                id="add"
-              />
-            </div>
-            <div className="mb-3 col-lg-12 col-md-12 col-12">
-              <label htmlFor="desc" className="form-label">Description</label>
-              <textarea
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
-                name="desc"
-                className='form-control'
-                id="desc"
-                cols="30"
-                rows="5"
-              ></textarea>
-            </div>
+            
             <div className="mb-3 col-lg-12 col-md-12 col-12">
               <label htmlFor="image" className="form-label">Image</label>
               <input
@@ -205,6 +238,8 @@ const Register = () => {
                 className="form-control"
                 id="image"
               />
+              {errors.image && <p className="text-danger">{errors.image}</p>}
+              {imageError && <p className="text-danger">{imageError}</p>}
               {imageUrl && (
                 <img src={imageUrl} alt="Uploaded" className="img-thumbnail mt-3" style={{ maxWidth: '200px' }} />
               )}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { BiSearch } from "react-icons/bi"; 
+import { BiSearch } from "react-icons/bi";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import cup from '../Assets/trophy.png'
 import '../Styles/Navbar.css'
@@ -26,7 +26,7 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <div className="navbar-logo">
-                <img src={cup} alt="Logo" />
+                <h1>Logo</h1>
             </div>
             <div className={`menu-icon ${showSidebar ? 'active' : ''}`} onClick={toggleSidebar}>
                 <div className="bar"></div>
@@ -44,9 +44,9 @@ const Navbar = () => {
                         <Link to={'/macos-client-configurations/'}><li>MacOS Client Configuration</li></Link>
                     </ul>
                 </li> */}
-                <Link to={''}><div>FIND A TOURNAMENT</div></Link>
-                <Link to={''}><div>PRICING</div></Link>
-                <button>SIGN UP/LOGIN</button>
+                <Link to={'/table'}><div>Employee List</div></Link>
+                <Link to={''}><div>Hukum Gupta -</div></Link>
+                <Link to={'/'}><div>Logout</div></Link>
                 {/* <div><BiSearch /></div> */}
             </ul>
 
@@ -59,17 +59,9 @@ const Navbar = () => {
 
                 <div className="options-section">
                     <Link to={'/'}><div>Home</div></Link>
-                    <Link to={'/about'}><div>About Us</div></Link>
-                    <div className={`works-accordion ${showHowItWorksOptions ? 'active' : ''}`} >
-                        <div onClick={toggleHowItWorksOptions}>How it Works</div>
-                        <div className="sub-options">
-                            <Link to={'/linux-client-configuration/'}>Linux Client Configuration</Link>
-                            <Link to={'/windows-client-setup-configuration/'}>Windows Client Configuration</Link>
-                            <Link to={'/macos-client-configurations/'}>MacOS Client Configuration</Link>
-                        </div>
-                    </div>
-                    <Link to={'/contact-us'}><div>Contact Us</div></Link>
-                    <div><BiSearch /></div>
+                    <Link to={''}><div>Employee List</div></Link>
+                    <Link to={''}><div>Hukum Gupta -</div></Link>
+                    <Link to={''}><div>Logout</div></Link>
                 </div>
             </div>
         </div>

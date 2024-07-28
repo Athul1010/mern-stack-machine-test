@@ -5,8 +5,8 @@
     justify-content: space-around;
     align-items: center;
     padding: 10px 20px;
-    background-color: rgb(34,139,34);
-    color: #fff;
+    background-color: rgb(255,255,0);
+    color: black;
   }
   
   .navbar-logo img {
@@ -28,7 +28,7 @@
   
   .navbar-options a{
     text-decoration: none;
-    color: white;
+    color: black;
   }
   
   .dropdown {
