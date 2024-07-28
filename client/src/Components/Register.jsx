@@ -9,8 +9,8 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
   const [work, setWork] = useState('');
-  const [add, setAdd] = useState('');
-  const [desc, setDesc] = useState('');
+  // const [add, setAdd] = useState('');
+  // const [desc, setDesc] = useState('');
   const [gender, setGender] = useState('');
   const [course, setCourse] = useState([]);
   const [image, setImage] = useState(null);
@@ -68,8 +68,8 @@ const Register = () => {
     formData.append('email', email);
     formData.append('mobile', mobile);
     formData.append('work', work);
-    formData.append('add', add);
-    formData.append('desc', desc);
+    // formData.append('add', add);
+    // formData.append('desc', desc);
     formData.append('gender', gender);
     formData.append('course', course.join(','));
     if (image) {
@@ -233,7 +233,7 @@ const Register = () => {
               {errors.course && <p className="text-danger">{errors.course}</p>}
             </div>
 
-            <div className="mb-3 col-lg-6 col-md-6 col-12">
+            {/* <div className="mb-3 col-lg-6 col-md-6 col-12">
               <label htmlFor="add" className="form-label">Address</label>
               <input
                 type="text"
@@ -255,7 +255,7 @@ const Register = () => {
                 cols="30"
                 rows="5"
               ></textarea>
-            </div>
+            </div> */}
             
             <div className="mb-3 col-lg-12 col-md-12 col-12">
               <label htmlFor="image" className="form-label">Image</label>
