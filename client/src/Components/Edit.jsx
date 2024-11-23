@@ -81,7 +81,7 @@ const Edit = () => {
     } else {
       setImage(null);
       setImageUrl('');
-      alert('Only JPG, PNG images are supported.');
+      alert('Only JPG, PNG images are supported.'); 
     }
   };
 
