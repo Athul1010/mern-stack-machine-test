@@ -43,7 +43,7 @@ router.post("/register", upload.single('image'), async (req, res) => {
     if (preuser) {
       return res.status(422).json("This user is already present");
     } else {
-      const adduser = new users({
+      const adduser = new users({ 
         name, email, mobile, work, gender, course, image
       });
 
