@@ -55,7 +55,7 @@ const Register = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+//---------------------------------------------------------------------------------------------------------------
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -88,6 +88,8 @@ const Register = () => {
       alert('Registration failed');
     }
   };
+
+//---------------------------------------------------------------------------------------------------------
 
   const handleCourseChange = (e) => {
     const { value, checked } = e.target;
